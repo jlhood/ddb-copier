@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  DestinationTableName:
+    Type: String
+    Description: DynamoDB table name of destination table to write to
+  SourceTableStreamARN:
+    Type: String
+    Description: DynamoDB table name of source table to be copied
+  StreamProcessorTimeout:
+    Type: Number
+    Default: 60
+    MinValue: 30
+    MaxValue: 300
+    Description: Timeout of the DynamoDB Stream Lambda function.
+  StreamProcessorBatchSize:
+    Default: 5
+    Type: String
+    Description: Batch size of DynamoDB Stream Lambda Trigger.
+
+Resources:
+  DynamoDBCopier:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: target/ddb-copier-1.0.0.jar
+      Runtime: java8
+      Handler: 'com.jlhood.ddbcopier.lambda.Handler::handleRequest'
+      Tracing: Active
+      MemorySize: 1536
+      Timeout: !Ref StreamProcessorTimeout
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DestinationTableName
+      Environment:
+        Variables:
+          DESTINATION_TABLE_NAME: !Ref DestinationTableName
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: !Ref SourceTableStreamARN
+            StartingPosition: TRIM_HORIZON
+            BatchSize: !Ref StreamProcessorBatchSize
+
+Outputs:
+  DynamoDBCopierFunctionName:
+    Value: !Ref DynamoDBCopier
+  DynamoDBCopierFunctionARN:
+    Value: !GetAtt DynamoDBCopier.Arn
