@@ -1,12 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Parameters:
-  DestinationTableName:
-    Type: String
-    Description: DynamoDB table name of destination table to write to
   SourceTableStreamARN:
     Type: String
     Description: DynamoDB table name of source table to be copied
+  DestinationTableName:
+    Type: String
+    Description: DynamoDB table name of destination table to copy data to
   StreamProcessorTimeout:
     Type: Number
     Default: 60
@@ -22,7 +22,7 @@ Resources:
   DynamoDBCopier:
     Type: 'AWS::Serverless::Function'
     Properties:
-      CodeUri: target/ddb-copier-1.0.0.jar
+      CodeUri: target/ddb-copier-1.0.1-SNAPSHOT.jar
       Runtime: java8
       Handler: 'com.jlhood.ddbcopier.lambda.Handler::handleRequest'
       Tracing: Active
