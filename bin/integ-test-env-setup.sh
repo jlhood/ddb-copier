@@ -29,7 +29,7 @@ aws cloudformation deploy \
 test_environment_stack_outputs=$(aws cloudformation describe-stacks --stack-name $test_environment_stack_name | jq -e '.Stacks[0].Outputs')
 source_table_name=$(echo $test_environment_stack_outputs | jq -er '.[] | select(.OutputKey | contains("SourceTableName")) | .OutputValue')
 source_table_stream_arn=$(echo $test_environment_stack_outputs | jq -er '.[] | select(.OutputKey | contains("SourceTableStreamArn")) | .OutputValue')
-copy_table_name=$(echo $test_environment_stack_outputs | jq -er '.[] | select(.OutputKey | contains("CopyTable")) | .OutputValue')
+copy_table_name=$(echo $test_environment_stack_outputs | jq -er '.[] | select(.OutputKey | contains("CopyTableName")) | .OutputValue')
 
 echo "Packaging app template"
 output_template_path=target/package_template.yml
