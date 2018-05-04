@@ -120,7 +120,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.6</version>
+            <version>1.16.18</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -144,7 +144,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.11.26</version>
+            <version>1.11.320</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
